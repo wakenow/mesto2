@@ -4,6 +4,6 @@
     display: grid;
     grid-template-columns: repeat( auto-fit, minmax(282px, 1fr) );
     grid-template-rows: repeat(2, 1fr);
-    margin: 47.25px auto 66px;
+    margin: 47px auto 66px;
     grid-gap: 18px;
 }

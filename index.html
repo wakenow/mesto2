@@ -9,84 +9,80 @@
 <body class="wrapper">
     <div class="page">
         <header class="header">
-            <img class="header__logo" src="images/Vector (1).svg" alt="Логотип">
-            <div class="header__line"></div>
+            <img class="header__logo" src="images/Header-Logo.svg" alt="Логотип">
         </header>
         <main class="content">
             <section class="profile">
                 <img class="profile__avatar" src="images/kusto.svg" alt="Аватар">
                 <div class="profile__profile-info">
-                    <div class="profile__name-flex">
-                    <p class="profile__name">Жак-Ив Кусто</p>
-                    <button class="profile__profile-button"></button>
+                    <div class="profile__name-wrapper">
+                        <h1 class="profile__name">Жак-Ив Кусто</h1>
+                        <button type="button" class="profile__profile-button"></button>
                     </div>
                     <p class="profile__subtitle">Исследователь океана</p>
                 </div>
-                <button class="profile__add-button"></button>
+                <button type="button" class="profile__add-button"></button>
             </section>
             <section class="elements">
                 <div class="element">
                     <img class="element__image" src="images/altai-min.jpg" alt="Горный Алтай">
-                    <div class="element__flex">
+                    <div class="element__name">
                     <p class="element__text">Горный Алтай</p>
-                    <button class="element__like-button"></button>
+                    <button type="button" class="element__like-button"></button>
                     </div>
                 </div>
                 <div class="element">
                     <img class="element__image" src="images/baikal-min.jpg" alt="Байкал">
-                    <div class="element__flex">
+                    <div class="element__name">
                     <p class="element__text">Байкал</p>
-                    <button class="element__like-button"></button>
+                    <button type="button" class="element__like-button"></button>
                     </div>
                 </div>
                 <div class="element">
                     <img class="element__image" src="images/arhiz-min.jpg" alt="Архыз">
-                    <div class="element__flex">
+                    <div class="element__name">
                     <p class="element__text">Архыз</p>
-                    <button class="element__like-button"></button>
+                    <button type="button" class="element__like-button"></button>
                     </div>
                 </div>
                 <div class="element">
                     <img class="element__image" src="images/hakasiya-min.jpg" alt="Хакасия">
-                    <div class="element__flex">
+                    <div class="element__name">
                     <p class="element__text">Хакасия</p>
-                    <button class="element__like-button"></button>
+                    <button type="button" class="element__like-button"></button>
                     </div>
                 </div>
                 <div class="element">
                     <img class="element__image" src="images/karel-min.jpg" alt="Карелия">
-                    <div class="element__flex">
+                    <div class="element__name">
                     <p class="element__text">Карелия</p>
-                    <button class="element__like-button"></button>
+                    <button type="button" class="element__like-button"></button>
                     </div>
                 </div>
                 <div class="element">
                     <img class="element__image" src="images/dombai-min.jpg" alt="Домбай">
-                    <div class="element__flex">
+                    <div class="element__name">
                     <p class="element__text">Домбай</p>
-                    <button class="element__like-button"></button>
+                    <button type="button" class="element__like-button"></button>
                     </div>
                 </div>                
-            </section>
-            <section class="edit-form">
-                <div class="popup"></div>
-                <div class="popup__container">
-                    <p class="popup__title">Редактировать профиль</p>
-                    <form class="popup__text">
-                        <input class="popup__name-form" type="text">
-                    </form>
-                    <form class="popup__text">
-                        <input class="popup__bio-form" type="text">
-                    </form>
-                    <button class="popup__submit"><p class="popup__submit-text">Сохранить</p></button>   
-                    <button class="popup__close-button"></button>                
-                </div>
-                 
             </section>
         </main>
         <footer class="footer">
             <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
         </footer>
+        <div class="edit-form">
+            <div class="popup"></div>
+            <div class="popup__container">
+                <p class="popup__title">Редактировать профиль</p>
+                <form class="popup__forms" name="edit-forms" action="#" method="GET">
+                    <input class="popup__form popup__form_name" type="text" name="name">
+                    <input class="popup__form popup__form_bio" type="text" name="bio">
+                    <button type="submit" class="popup__submit">Сохранить</button>
+                </form>   
+                <button type="reset" class="popup__close-button"></button>                
+            </div>
+        </div>
     </div>
     <script src="./scripts/script.js"></script>
 </body>

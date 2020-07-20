@@ -1,4 +1,4 @@
-.profile__name-flex {
+.profile__name-wrapper {
     display:flex;
     flex-direction: row;
 }

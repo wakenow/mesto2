@@ -1,6 +1,6 @@
 .profile__add-button {
     margin-left: auto;
-    background-image: url(../../../images/vectorofingection.svg);
+    background-image: url(../../../images/add-button.svg);
     background-position: center;
     background-repeat: no-repeat;
     background-color: black;
@@ -23,5 +23,5 @@
 .profile__add-button:hover {
     cursor: pointer;
     border: 2px solid rgba(255, 255, 255, 0.6);
-    background-image: url(../../../images/hover.svg);
+    background-image: url(../../../images/add-hover.svg);
 }

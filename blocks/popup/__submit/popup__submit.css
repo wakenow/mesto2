@@ -2,10 +2,16 @@
     background: #000000;
     border-radius: 2px;
     padding: 0;
-    width: 80%;
+    width: 100%;
     outline: none;
     height: 50px;
-    margin-top: 18px;
+    margin-top: 48px;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 22px;
+    color: #FFFFFF;
 }
 
 .popup__submit:hover {
