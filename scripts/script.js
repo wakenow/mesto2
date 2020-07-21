@@ -5,7 +5,6 @@ const nameInput = document.querySelector('.popup__form_name');
 const jobInput = document.querySelector('.popup__form_bio');
 const profileName = document.querySelector('.profile__name');
 const profileBio = document.querySelector('.profile__subtitle');
-const submitButton = document.querySelector('.popup__submit');
 const formElement = document.querySelector('.popup__forms');
 
 
