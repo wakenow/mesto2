@@ -83,6 +83,8 @@ function formEditSubmitHandler(evt) {
 function formNewElementSubmitHandler(evt) {
   evt.preventDefault();
   addElement(placeInput.value, linkInput.value);
+  placeInput.value = '';
+  linkInput.value = '';
   toggleModal(popUpNewElement);
 }
 
@@ -96,9 +98,9 @@ popUpImageCloseBtn.addEventListener('click', () => toggleModal(popUpImage));
 popUpEditForm.addEventListener('submit', formEditSubmitHandler);
 popUpNewElementForm.addEventListener('submit', formNewElementSubmitHandler);
 
+const elementTemplate = document.querySelector('#place').content;
 
 function addElement(name, link) {
-  const elementTemplate = document.querySelector('#place').content;
   const newElement = elementTemplate.cloneNode(true);
   const newElementImage = newElement.querySelector('.element__image')
   newElementImage.src = link;
@@ -121,7 +123,7 @@ function switchDark() {
 
 function removeElement() {
   const clickedLike = event.target;
-  clickedLike.parentElement.remove();
+  clickedLike.closest('.element').remove();
 }
 
 initialCards.forEach(function(item) {
