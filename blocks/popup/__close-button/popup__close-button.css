@@ -2,19 +2,13 @@
     background-image: url(../../../images/close-icon.svg);
     background-repeat: no-repeat;
     background-position: center;
-    margin: 0; 
-    padding: 0; 
-    border: 0; 
-    outline: none; 
     background-color: transparent;
-    position: absolute;
-    width: 41px;
-    height: 41px;
-    left: 99%;
-    top: -11%;
+    border: 0;
+    padding: 0;
 }
 
 .popup__close-button:hover {
     background-image: url(../../../images/close-grey.svg);
     cursor: pointer;
 }
+

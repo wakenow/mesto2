@@ -1,5 +1,9 @@
 .element {
     max-width: 282px;
-    align-self: center;
-    justify-self: center;
+    position: relative;
+    overflow: hidden;
+    color: black;
+    background-color: white;
+    margin: 0 auto 0;
+    border-radius: 10px;
 }

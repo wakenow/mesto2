@@ -1,9 +1,11 @@
 .elements {
-    min-width: 282px;
-    max-width: 882px;
+    width: 100%;
     display: grid;
     grid-template-columns: repeat( auto-fit, minmax(282px, 1fr) );
     grid-template-rows: repeat(2, 1fr);
     margin: 47px auto 66px;
-    grid-gap: 18px;
+    list-style: none;
+    padding: 0;
+    column-gap: 18px;
+    row-gap: 20px;
 }

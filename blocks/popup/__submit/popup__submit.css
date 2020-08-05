@@ -2,16 +2,16 @@
     background: #000000;
     border-radius: 2px;
     padding: 0;
-    width: 100%;
+    width: 80%;
     outline: none;
     height: 50px;
-    margin-top: 18px;
     font-family: 'Inter', 'Arial', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     line-height: 22px;
     color: #FFFFFF;
+    margin-bottom: 36px;
 }
 
 .popup__submit:hover {
@@ -19,7 +19,7 @@
     cursor: pointer;
 }
 
-@media (max-width:508px) {
+@media (max-width: 508px) {
     .popup__submit {
         margin-top: 0;
     }
