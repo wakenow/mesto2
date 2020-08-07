@@ -33,21 +33,25 @@
             <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
         </footer>
         <div class="popup popup_type_edit">
-            <form class="popup__forms popup__forms_type_input" name="edit-forms" action="#" method="GET">
+            <form class="popup__forms popup__forms_type_input" name="edit-forms" action="#" method="GET" novalidate>
                 <p class="popup__title">Редактировать профиль</p>
-                <input class="popup__form popup__form_type_name" type="text" name="name">
-                <input class="popup__form popup__form_type_bio" type="text" name="bio">
+                <input class="popup__form popup__form_type_name" type="text" name="name" required minlength="2" maxlength="40">
+                <span class="popup__error popup__error_type_name"></span>
+                <input class="popup__form popup__form_type_bio" type="text" name="bio" required minlength="2" maxlength="200">
+                <span class="popup__error popup__error_type_bio"></span>
                 <button type="submit" class="popup__submit">Сохранить</button>
                 <button type="reset" class="popup__close-button popup__close-button_type_input"></button>
             </form>                   
             </div>
         </div>
         <div class="popup popup_type_new-element">
-            <form class="popup__forms popup__forms_type_input" name="edit-forms" action="#" method="GET">
+            <form class="popup__forms popup__forms_type_input" name="edit-forms" action="#" method="GET" novalidate>
                 <p class="popup__title">Новое место</p>
-                <input class="popup__form popup__form_type_place" type="text" name="place" placeholder="Название">
-                <input class="popup__form popup__form_type_link" type="text" name="link" placeholder="Ссылка на картинку">
-                <button type="submit" class="popup__submit">Сохранить</button>
+                <input class="popup__form popup__form_type_place" type="text" name="place" placeholder="Название" required minlength="1" maxlength="30">
+                <span class="popup__error popup__error_type_place"></span>
+                <input class="popup__form popup__form_type_link" type="url" name="link" placeholder="Ссылка на картинку" required>
+                <span class="popup__error popup__error_type_link"></span>
+                <button type="submit" class="popup__submit">Создать</button>
                 <button type="reset" class="popup__close-button popup__close-button_type_input"></button>                
             </form>   
             </div>
@@ -70,5 +74,6 @@
           </div>
         </li>
       </template>  
+    <script src="./scripts/validate.js"></script>
     <script src="./scripts/script.js"></script>
 </body>

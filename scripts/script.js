@@ -83,13 +83,13 @@ function formEditSubmitHandler(evt) {
 function formNewElementSubmitHandler(evt) {
   evt.preventDefault();
   addElement(placeInput.value, linkInput.value);
-  placeInput.value = '';
-  linkInput.value = '';
   toggleModal(popUpNewElement);
 }
 
 editProfileBtn.addEventListener('click', popUpEditToggle);
 addButton.addEventListener('click', () => toggleModal(popUpNewElement));
+addButton.addEventListener('click', () => placeInput.value = '');
+addButton.addEventListener('click', () => linkInput.value = '');
 
 closeEditPopUpBtn.addEventListener('click', popUpEditToggle);
 popUpNewElementCloseBtn.addEventListener('click', () => toggleModal(popUpNewElement));
@@ -130,6 +130,13 @@ initialCards.forEach(function(item) {
   addElement(item.name, item.link);
 });
 
+popUp.forEach((item) => {
+  item.addEventListener('click', (evt) => {
+      if (evt.target.classList.contains('popup_opened')) {
+          toggleModal(evt.target);
+      }
+  });
+});
 
 
 
