@@ -113,6 +113,8 @@ function formNewElementSubmitHandler(evt) {
   evt.preventDefault();
   const newElement = addElement(placeInput.value, linkInput.value);
   addNewElement(newElement);
+  placeInput.value = '';
+  linkInput.value = '';
   toggleModal(popUpNewElement);
 }
 
@@ -128,8 +130,6 @@ function removeElement(evt) {
 
 editProfileBtn.addEventListener('click', popUpEditToggle);
 addButton.addEventListener('click', () => toggleModal(popUpNewElement));
-addButton.addEventListener('click', () => placeInput.value = '');
-addButton.addEventListener('click', () => linkInput.value = '');
 
 closeEditPopUpBtn.addEventListener('click', popUpEditToggle);
 popUpNewElementCloseBtn.addEventListener('click', () => toggleModal(popUpNewElement));

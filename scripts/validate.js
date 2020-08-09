@@ -65,14 +65,6 @@ function enableValidation(validationItems) {
     });
 }
 
-function invalidInput(inputList) {
-    if (inputList.some(item => !item.validity.valid)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 function toggleBtn(inputList, buttonElement) {
     if (invalidInput(inputList)) {
         buttonElement.classList.add(toggleBtn.inactiveButtonClass);
@@ -82,4 +74,13 @@ function toggleBtn(inputList, buttonElement) {
         buttonElement.removeAttribute('disabled');
     }
 }
+
+function invalidInput(inputList) {
+    if (inputList.some(item => !item.validity.valid)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 enableValidation(validationList);
