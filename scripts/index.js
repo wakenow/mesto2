@@ -45,6 +45,30 @@ const initialCards = [{
 }
 ];
 
+function showPicture(name, link) {
+  popUpImagePicture.setAttribute('src', '' + link);
+  popUpImageSubtitle.textContent = name;
+  toggleModal(popUpImage);
+}
+
+const elementTemplate = document.querySelector('#place').content;
+
+function addElement(name, link) {
+  const newElement = elementTemplate.cloneNode(true);
+  const newElementImage = newElement.querySelector('.element__image')
+  newElementImage.src = link;
+  newElementImage.alt = name;
+  newElement.querySelector('.element__text').textContent = name;
+  newElement.querySelector('.element__like-button').addEventListener('click', switchDark);
+  newElement.querySelector('.element__remove-button').addEventListener('click', removeElement);
+  newElementImage.addEventListener('click', () => showPicture(name, link));
+  return newElement;
+}
+
+function addNewElement(item) {
+  elements.prepend(item);
+}
+
 function toggleModal(modal) {
   modal.classList.toggle('popup_opened');
   escapeHandler.openedModal = modal;
@@ -52,19 +76,24 @@ function toggleModal(modal) {
       document.addEventListener('keyup', escapeHandler);
   } else {
       document.removeEventListener('keyup', escapeHandler);
+      const openedForm = modal.querySelector('.popup__forms');
+      if (openedForm.classList.contains('popup__forms_type_input')) {
+          clearErrors(openedForm);
+      };
   }
+}
+
+function clearErrors(form) {
+  const inputList = Array.from(form.querySelectorAll('.popup__form'));
+  const submitButton = form.querySelector('.popup__submit');
+  inputList.forEach((item) => { removeError(form, item); });
+  toggleBtn(inputList, submitButton);
 }
 
 function escapeHandler(evt) {
   if (evt.key === 'Escape') {
       toggleModal(escapeHandler.openedModal);
   }
-}
-
-function showPicture(name, link) {
-  popUpImagePicture.setAttribute('src', '' + link);
-  popUpImageSubtitle.textContent = name;
-  toggleModal(popUpImage);
 }
 
 function popUpEditToggle() {
@@ -82,8 +111,19 @@ function formEditSubmitHandler(evt) {
 
 function formNewElementSubmitHandler(evt) {
   evt.preventDefault();
-  addElement(placeInput.value, linkInput.value);
+  const newElement = addElement(placeInput.value, linkInput.value);
+  addNewElement(newElement);
   toggleModal(popUpNewElement);
+}
+
+function switchDark(evt) {
+  const clickedLike = evt.target;
+  clickedLike.classList.toggle('element__like-button_pressed');
+}
+
+function removeElement(evt) {
+  const clickedLike = evt.target;
+  clickedLike.closest('.element').remove();
 }
 
 editProfileBtn.addEventListener('click', popUpEditToggle);
@@ -98,36 +138,9 @@ popUpImageCloseBtn.addEventListener('click', () => toggleModal(popUpImage));
 popUpEditForm.addEventListener('submit', formEditSubmitHandler);
 popUpNewElementForm.addEventListener('submit', formNewElementSubmitHandler);
 
-const elementTemplate = document.querySelector('#place').content;
-
-function addElement(name, link) {
-  const newElement = elementTemplate.cloneNode(true);
-  const newElementImage = newElement.querySelector('.element__image')
-  newElementImage.src = link;
-  newElementImage.alt = name;
-  newElement.querySelector('.element__text').textContent = name;
-  newElement.querySelector('.element__like-button').addEventListener('click', switchDark);
-  newElement.querySelector('.element__remove-button').addEventListener('click', removeElement);
-  newElement.querySelector('.element__image').addEventListener('click', () => showPicture(name, link));
-  addNewElement(newElement);
-}
-
-function addNewElement(item) {
-  elements.prepend(item);
-}
-
-function switchDark() {
-  const clickedLike = event.target;
-  clickedLike.classList.toggle('element__like-button_pressed');
-}
-
-function removeElement() {
-  const clickedLike = event.target;
-  clickedLike.closest('.element').remove();
-}
-
 initialCards.forEach(function(item) {
-  addElement(item.name, item.link);
+  const newElement = addElement(item.name, item.link);
+  addNewElement(newElement);
 });
 
 popUp.forEach((item) => {
@@ -137,8 +150,6 @@ popUp.forEach((item) => {
       }
   });
 });
-
-
 
 
 

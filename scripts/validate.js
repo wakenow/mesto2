@@ -32,7 +32,6 @@ function checkValidation(formElement, inputElement) {
 function eventListeners(formElement) {
     const inputList = Array.from(formElement.querySelectorAll(eventListeners.inputSelector));
     const buttonElement = formElement.querySelector(eventListeners.submitButtonSelector);
-
     toggleBtn(inputList, buttonElement);
     inputList.forEach((item) => {
         item.addEventListener('input', () => {
@@ -66,6 +65,13 @@ function enableValidation(validationItems) {
     });
 }
 
+function invalidInput(inputList) {
+    if (inputList.some(item => !item.validity.valid)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 function toggleBtn(inputList, buttonElement) {
     if (invalidInput(inputList)) {
@@ -74,14 +80,6 @@ function toggleBtn(inputList, buttonElement) {
     } else {
         buttonElement.classList.remove(toggleBtn.inactiveButtonClass);
         buttonElement.removeAttribute('disabled');
-    }
-}
-
-function invalidInput(inputList) {
-    if (inputList.some(item => !item.validity.valid)) {
-        return true;
-    } else {
-        return false;
     }
 }
 enableValidation(validationList);
