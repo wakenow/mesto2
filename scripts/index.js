@@ -19,32 +19,6 @@ const jobInput = document.querySelector('.popup__form_type_bio');
 const placeInput = document.querySelector('.popup__form_type_place');
 const linkInput = document.querySelector('.popup__form_type_link');
 
-const initialCards = [{
-  name: 'Архыз',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-},
-{
-  name: 'Челябинская область',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-},
-{
-  name: 'Иваново',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-},
-{
-  name: 'Камчатка',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-},
-{
-  name: 'Холмогорский район',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-},
-{
-  name: 'Байкал',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-}
-];
-
 function showPicture(name, link) {
   popUpImagePicture.setAttribute('src', '' + link);
   popUpImageSubtitle.textContent = name;
@@ -78,7 +52,7 @@ function toggleModal(modal) {
       document.removeEventListener('keyup', escapeHandler);
       const openedForm = modal.querySelector('.popup__forms');
       if (openedForm.classList.contains('popup__forms_type_input')) {
-          clearErrors(openedForm);
+        clearErrors(openedForm);
       };
   }
 }
