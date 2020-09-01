@@ -1,3 +1,16 @@
+import FormValidator from './FormValidator.js';
+import Card from './Card.js';
+
+
+const validationList = {
+  formSelector: '.popup__forms_type_input',
+  inputSelector: '.popup__form',
+  submitButtonSelector: '.popup__submit',
+  inactiveButtonClass: 'popup__submit_disabled',
+  inputErrorClass: 'popup__form_type_error',
+  errorClass: 'popup__error_visible'
+};
+
 const editProfileBtn = document.querySelector('.profile__profile-button');
 const addButton = document.querySelector('.profile__add-button');
 const popUp = Array.from(document.querySelectorAll('.popup'));
@@ -19,24 +32,37 @@ const jobInput = document.querySelector('.popup__form_type_bio');
 const placeInput = document.querySelector('.popup__form_type_place');
 const linkInput = document.querySelector('.popup__form_type_link');
 
+const initialCards = [{
+  name: 'Архыз',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+},
+{
+  name: 'Челябинская область',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+},
+{
+  name: 'Иваново',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+},
+{
+  name: 'Камчатка',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+},
+{
+  name: 'Холмогорский район',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+},
+{
+  name: 'Байкал',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+}
+];
+
+
 function showPicture(name, link) {
   popUpImagePicture.setAttribute('src', '' + link);
   popUpImageSubtitle.textContent = name;
   toggleModal(popUpImage);
-}
-
-const elementTemplate = document.querySelector('#place').content;
-
-function addElement(name, link) {
-  const newElement = elementTemplate.cloneNode(true);
-  const newElementImage = newElement.querySelector('.element__image')
-  newElementImage.src = link;
-  newElementImage.alt = name;
-  newElement.querySelector('.element__text').textContent = name;
-  newElement.querySelector('.element__like-button').addEventListener('click', switchDark);
-  newElement.querySelector('.element__remove-button').addEventListener('click', removeElement);
-  newElementImage.addEventListener('click', () => showPicture(name, link));
-  return newElement;
 }
 
 function addNewElement(item) {
@@ -52,7 +78,7 @@ function toggleModal(modal) {
       document.removeEventListener('keyup', escapeHandler);
       const openedForm = modal.querySelector('.popup__forms');
       if (openedForm.classList.contains('popup__forms_type_input')) {
-        clearErrors(openedForm);
+          clearErrors(openedForm);
       };
   }
 }
@@ -76,30 +102,19 @@ function popUpEditToggle() {
   toggleModal(popUpEdit);
 }
 
-function formEditSubmitHandler(evt) {
-  evt.preventDefault();
+function formEditSubmitHandler() {
   profileName.textContent = nameInput.value;
   profileBio.textContent = jobInput.value;
   popUpEditToggle();
 }
 
-function formNewElementSubmitHandler(evt) {
-  evt.preventDefault();
-  const newElement = addElement(placeInput.value, linkInput.value);
+function formNewElementSubmitHandler() {
+  const element = new Card({ name: placeInput.value, link: linkInput.value }, '#place', showPicture);
+  const newElement = element.renderElement();
   addNewElement(newElement);
   placeInput.value = '';
   linkInput.value = '';
   toggleModal(popUpNewElement);
-}
-
-function switchDark(evt) {
-  const clickedLike = evt.target;
-  clickedLike.classList.toggle('element__like-button_pressed');
-}
-
-function removeElement(evt) {
-  const clickedLike = evt.target;
-  clickedLike.closest('.element').remove();
 }
 
 editProfileBtn.addEventListener('click', popUpEditToggle);
@@ -113,8 +128,16 @@ popUpEditForm.addEventListener('submit', formEditSubmitHandler);
 popUpNewElementForm.addEventListener('submit', formNewElementSubmitHandler);
 
 initialCards.forEach(function(item) {
-  const newElement = addElement(item.name, item.link);
+  const element = new Card(item, '#place', showPicture);
+  const newElement = element.renderElement();
   addNewElement(newElement);
+});
+
+const formList = Array.from(document.querySelectorAll(validationList.formSelector));
+formList.forEach((item) => {
+  const validator = new FormValidator(validationList, item);
+  validator.enableValidation();
+  item.validator = validator;
 });
 
 popUp.forEach((item) => {
