@@ -5,7 +5,7 @@ export default class Card {
         this._templateSelector = templateSelector;
         this._popupHandler = popupHandler;
     }
-
+    
     _getTemplate() {
         const newElement = document
             .querySelector(this._templateSelector)
@@ -36,7 +36,7 @@ export default class Card {
         newElementImage.src = this._link;
         newElementImage.alt = this._name;
         this._setEventListeners(newElementImage);
-        this._element.querySelector('.element__name').textContent = this._name;
+        this._element.querySelector('.element__text').textContent = this._name;
         return this._element;
     }
 }

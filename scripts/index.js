@@ -72,22 +72,20 @@ function addNewElement(item) {
 function toggleModal(modal) {
   modal.classList.toggle('popup_opened');
   escapeHandler.openedModal = modal;
+  const openedContainer = modal.querySelector('.popup__forms');
+  const modalContainsForm = openedContainer.classList.contains('popup__forms_type_input');
   if (modal.classList.contains('popup_opened')) {
       document.addEventListener('keyup', escapeHandler);
+      if (modalContainsForm) {
+          setTimeout(function() { openedContainer.querySelector('.popup__form').focus(); }, 100);
+      }
   } else {
       document.removeEventListener('keyup', escapeHandler);
-      const openedForm = modal.querySelector('.popup__forms');
-      if (openedForm.classList.contains('popup__forms_type_input')) {
-          clearErrors(openedForm);
+      if (modalContainsForm) {
+          openedContainer.validator.clearErrors();
+          openedContainer.reset();
       };
   }
-}
-
-function clearErrors(form) {
-  const inputList = Array.from(form.querySelectorAll('.popup__form'));
-  const submitButton = form.querySelector('.popup__submit');
-  inputList.forEach((item) => { removeError(form, item); });
-  toggleBtn(inputList, submitButton);
 }
 
 function escapeHandler(evt) {
