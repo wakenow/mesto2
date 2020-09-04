@@ -13,7 +13,7 @@ const validationList = {
 
 const editProfileBtn = document.querySelector('.profile__profile-button');
 const addButton = document.querySelector('.profile__add-button');
-const popUp = Array.from(document.querySelectorAll('.popup'));
+const popUps = Array.from(document.querySelectorAll('.popup'));
 const popUpEdit = document.querySelector('.popup_type_edit');
 const popUpEditForm = popUpEdit.querySelector('.popup__forms');
 const closeEditPopUpBtn = popUpEdit.querySelector('.popup__close-button');
@@ -61,11 +61,16 @@ const initialCards = [{
 
 function showPicture(name, link) {
   popUpImagePicture.setAttribute('src', '' + link);
+  popUpImagePicture.setAttribute('alt', '' + name);
   popUpImageSubtitle.textContent = name;
   toggleModal(popUpImage);
 }
 
 function addNewElement(item) {
+  elements.prepend(item);
+}
+
+function addNewCard(item) {
   elements.prepend(item);
 }
 
@@ -127,8 +132,8 @@ popUpNewElementForm.addEventListener('submit', formNewElementSubmitHandler);
 
 initialCards.forEach(function(item) {
   const element = new Card(item, '#place', showPicture);
-  const newElement = element.renderElement();
-  addNewElement(newElement);
+  const newCard = element.renderElement();
+  addNewCard(newCard);
 });
 
 const formList = Array.from(document.querySelectorAll(validationList.formSelector));
@@ -138,7 +143,7 @@ formList.forEach((item) => {
   item.validator = validator;
 });
 
-popUp.forEach((item) => {
+popUps.forEach((item) => {
   item.addEventListener('click', (evt) => {
       if (evt.target.classList.contains('popup_opened')) {
           toggleModal(evt.target);
