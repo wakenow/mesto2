@@ -52,19 +52,19 @@ const initialCards = [{
 }
 ];
 
-//создаем экземпляры классов
+
 const user = new UserInfo({ nameSelector: '.profile__name', bioSelector: '.profile__subtitle' });
 const imagePopup = new PopupWithImage('.popup_type_image');
 const editModal = new PopupWithForm('.popup_type_edit', formEditSubmitHandler);
 const newCardModal = new PopupWithForm('.popup_type_new-element', formNewCardSubmitHandler);
 
-//навешиваем слушатели
+
 imagePopup.setEventListeners();
 editModal.setEventListeners();
 newCardModal.setEventListeners();
 
 
-//функции открытия модальных окон
+
 function handlePreviewPicture(name, link) {
     imagePopup.open(name, link);
 }
@@ -79,7 +79,7 @@ function openEditModal() {
   }, 100);
 }
 
-//функции - обработчики сабмитов
+
 function formEditSubmitHandler(data) {
     user.setUserInfo(data);
     this.close();
@@ -94,7 +94,7 @@ function formNewCardSubmitHandler(data) {
     this.close();
 }
 
-//создание первоначальной сетки с карточками
+
 const cardsGrid = new Section({
     items: initialCards,
     renderer: (item) => {
@@ -105,7 +105,7 @@ const cardsGrid = new Section({
 }, '.elements');
 cardsGrid.renderItems();
 
-//создание экземпляров класса FormValidator на каждой форме и привязка к форме
+
 const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
 formList.forEach((item) => {
     const validator = new FormValidator(validationConfig, item);
@@ -113,6 +113,6 @@ formList.forEach((item) => {
     item.validator = validator;
 });
 
-//установка слушателей на кнопки редактирования профиля и добавления карточки
+
 editProfileBtn.addEventListener('click', openEditModal);
 addButton.addEventListener('click', () => { newCardModal.open() });
