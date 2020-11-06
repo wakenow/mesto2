@@ -116,3 +116,9 @@ formList.forEach((item) => {
 
 editProfileBtn.addEventListener('click', openEditModal);
 addButton.addEventListener('click', () => { newCardModal.open() });
+addButton.addEventListener('click', () => {
+    newCardModal._submitButton.disabled = true;
+    newCardModal._submitButton.classList.add('popup__submit_disabled');
+    newCardModal.open()
+});
+
