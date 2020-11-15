@@ -25,7 +25,6 @@ export default class Api {
         // })
     }
 
-
     cardsDownload() {
         return fetch(this._cardsURL, {
                 method: 'GET',
@@ -42,7 +41,6 @@ export default class Api {
 
             })
     }
-
 
     profileDataUpload(name, about) {
         return fetch(this._userURL, {
