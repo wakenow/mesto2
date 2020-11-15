@@ -1,4 +1,4 @@
-.card__like-container {
+.element__like-container {
     display: flex;
     flex-direction: column;
     height: 36px;

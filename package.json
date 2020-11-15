@@ -4,9 +4,8 @@
   "description": "Пятая проектная работа онлайн-курсов Яндекс.Практикума.\r Одностраничный сайт, созданный по правилам Nested БЭМ. Выполнен с использованием flexbox и grid-layout. Сайт адаптирован для устройств разной ширины с помощью css. Использован язык javascript.\r Произведен рефакторинг кода.\r ## Планы по доработке\r 1. Проверить код на кроссбраузерность и дописать все вендорные префиксы.\r 2. Максимально адаптировать сайт под разные типы устройств.\r ## Страница на GitHub-Pages\r https://wakenow.github.io/mesto2",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf dist && webpack --mode production",
-    "dev": "webpack-dev-server --open --watch",
-    "deploy": "gh-pages -d dist"
+    "build": "rimraf dist && webpack --mode production",
+    "dev": "webpack-dev-server --open --watch"
   },
   "repository": {
     "type": "git",
@@ -27,7 +26,6 @@
     "css-loader": "^4.3.0",
     "cssnano": "^4.1.10",
     "file-loader": "^6.2.0",
-    "gh-pages": "^3.1.0",
     "html-loader": "^1.3.2",
     "html-webpack-plugin": "^4.5.0",
     "mini-css-extract-plugin": "^0.11.3",
