@@ -8,7 +8,7 @@ export default class Api {
         return fetch(this._userURL, {
                 method: 'GET',
                 headers: {
-                    authorisation: this._token
+                    authorization: this._token
                 }
             })
             .then((res) => {
@@ -29,7 +29,7 @@ export default class Api {
         return fetch(this._cardsURL, {
                 method: 'GET',
                 headers: {
-                    authorisation: this._token
+                    authorization: this._token
                 }
             })
             .then(res => {
@@ -46,7 +46,7 @@ export default class Api {
         return fetch(this._userURL, {
                 method: 'PATCH',
                 headers: {
-                    authorisation: this._token,
+                    authorization: this._token,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
@@ -66,7 +66,7 @@ export default class Api {
         return fetch(this._cardsURL, {
                 method: 'POST',
                 headers: {
-                    authorisation: this._token,
+                    authorization: this._token,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
@@ -88,7 +88,7 @@ export default class Api {
         return fetch(cardDeleteURL, {
                 method: 'DELETE',
                 headers: {
-                    authorisation: this._token
+                    authorization: this._token
                 }
             })
             .then(res => {
@@ -104,7 +104,7 @@ export default class Api {
         return fetch(cardLikeURL, {
                 method: 'PUT',
                 headers: {
-                    authorisation: this._token
+                    authorization: this._token
                 }
             })
             .then(res => {
@@ -121,7 +121,7 @@ export default class Api {
         return fetch(cardLikeURL, {
                 method: 'DELETE',
                 headers: {
-                    authorisation: this._token
+                    authorization: this._token
                 }
             })
             .then(res => {
@@ -136,7 +136,7 @@ export default class Api {
         return fetch((this._userURL + `/avatar`), {
                 method: 'PATCH',
                 headers: {
-                    authorisation: this._token,
+                    authorization: this._token,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({

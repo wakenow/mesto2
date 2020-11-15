@@ -34,7 +34,7 @@ const apiConfig = {
     token: '9c5efa47-3aee-400f-b0b8-aef1a353a938'
 }
 
-const user = new UserInfo({ nameSelector: '.profile__name', bioSelector: '.profile__subtitle', avatarSelector: '.profile__avatar'});
+const user = new UserInfo({ nameSelector: '.profile__name', bioSelector: '.profile__subtitle'});
 const imagePopup = new PopupWithImage('.popup_type_image');
 const editModal = new PopupWithForm('.popup_type_edit', formEditSubmitHandler);
 const newCardModal = new PopupWithForm('.popup_type_new-element', formNewCardSubmitHandler);
@@ -52,6 +52,7 @@ Promise.all(dataDownload)
         userData = data[0];
         const cardsData = data[1];
         user.setUserInfo({ "name": userData.name, "bio": userData.about });
+        userAvatar.src = userData.avatar; 
         cardsGrid = new Section({
             items: cardsData,
             renderer: (item) => {
@@ -78,12 +79,13 @@ Promise.all(dataDownload)
         
         editButton.addEventListener('click', openEditModal);
         addButton.addEventListener('click', () => {
-            console.log(newCardModal); 
-            toggleSubmitButtonState();
+            newCardModal._submitButton.disabled = true; 
+            newCardModal._submitButton.classList.add('popup__submit_disabled'); 
             newCardModal.open() 
         }); 
         userAvatar.addEventListener('click', () => { 
-            toggleSubmitButtonState();
+            avatarModal._submitButton.disabled = true; 
+            avatarModal._submitButton.classList.add('popup__submit_disabled'); 
             avatarModal.open() 
         });
     })
@@ -94,7 +96,7 @@ Promise.all(dataDownload)
 
 
 function formAvatarSubmitHandler(data) {
-    avatarModal.submitButton.textContent = 'Сохранение...';
+    avatarModal._submitButton.textContent = 'Сохранение...';
     console.log(data);
     api.avatarUpload(data)
         .then((res) => {
@@ -107,7 +109,7 @@ function formAvatarSubmitHandler(data) {
             console.log(err);
         })
         .finally(() => {
-            avatarModal.submitButton.textContent = 'Сохранить';
+            avatarModal._submitButton.textContent = 'Сохранить';
         })
 
 }
@@ -173,7 +175,7 @@ function openEditModal() {
 }
 
 function formEditSubmitHandler(data) {
-    editModal.submitButton.textContent = 'Сохранение...'
+    editModal._submitButton.textContent = 'Сохранение...'
     api.profileDataUpload(data.name, data.bio)
         .then((res) => {
             console.log(res);
@@ -185,12 +187,12 @@ function formEditSubmitHandler(data) {
             console.log(err);
         })
         .finally(() => {
-            editModal.submitButton.textContent = 'Сохранить'
+            editModal._submitButton.textContent = 'Сохранить'
         })
 }
 
 function formNewCardSubmitHandler(data) {
-    newCardModal.submitButton.textContent = 'Сохранение...'
+    newCardModal._submitButton.textContent = 'Сохранение...'
     api.newCardUpload(data.place, data.link)
         .then((res) => {
             console.log(res);
@@ -215,7 +217,7 @@ function formNewCardSubmitHandler(data) {
             console.log(err);
         })
         .finally(() => {
-            newCardModal.submitButton.textContent = 'Сохранить';
+            newCardModal._submitButton.textContent = 'Сохранить';
         })
 }
 

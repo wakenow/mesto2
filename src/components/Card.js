@@ -40,7 +40,7 @@ export default class Card {
         newCardImage.src = this._link;
         newCardImage.alt = this._name;
         this._setEventListeners(newCardImage);
-        this._element.querySelector('.element__title').textContent = this._name;
+        this._element.querySelector('.element__text').textContent = this._name;
         this._element.querySelector('.element__like-counter').textContent = this._likes.length;
 
         if ((this._likes.some(elem => elem._id === this._myID))) {

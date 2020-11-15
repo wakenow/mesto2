@@ -17,7 +17,7 @@ export default class FormValidator {
 
     clearErrors() {
         this._inputList.forEach((item) => { this._hideInputError(item); });
-        this.toggleSubmitButtonState(this.submitButton);
+        this._toggleSubmitButtonState(this.submitButton);
     }
 
     _getInputList() {
@@ -40,10 +40,10 @@ export default class FormValidator {
         this._inputList.forEach((item) => {
             item.addEventListener('input', () => {
                 this._checkInputValidity(item);
-                this.toggleSubmitButtonState();
+                this._toggleSubmitButtonState();
             });
             item.addEventListener('focus', () => {
-                this.toggleSubmitButtonState();
+                this._toggleSubmitButtonState();
             });
         });
     }
@@ -70,7 +70,7 @@ export default class FormValidator {
         errorElement.textContent = errorMessage;
     }
 
-    toggleSubmitButtonState() {
+    _toggleSubmitButtonState() {
         if (this._hasInvalidInput(this._inputList)) {
             this._buttonElement.classList.add(this._inactiveButtonClass);
             this._buttonElement.setAttribute('disabled', true);
