@@ -33,7 +33,7 @@ const message = document.querySelector('.popup__message');
 const apiConfig = {
     userURL: 'https://mesto.nomoreparties.co/v1/cohort-17/users/me',
     cardsURL: 'https://mesto.nomoreparties.co/v1/cohort-17/cards',
-    token: 'e6bf7ea4-0157-47ee-b8f8-bf17d3b13ba1'
+    token: '9c5efa47-3aee-400f-b0b8-aef1a353a938'
 }
 
 const user = new UserInfo({ nameSelector: '.profile__name', bioSelector: '.profile__subtitle' });
