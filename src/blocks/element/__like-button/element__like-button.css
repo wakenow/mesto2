@@ -1,15 +1,11 @@
 .element__like-button {
-    margin-right: 17px;
-    margin-top: auto;
-    margin-bottom: auto;
+    margin: 0;
+    height: 25px;
     background-image: url(../../../images/serdce.svg);
     background-position: center;
     background-repeat: no-repeat;
     background-color:white;
-    width: 30px;
-    height: 19px;
     padding: 0;
-    cursor: pointer;
     outline: none;
     border: none;
 }

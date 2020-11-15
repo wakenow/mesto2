@@ -2,6 +2,12 @@
     max-width: 120px;
     max-height: 120px;
     border-radius: 100px;
+    object-fit: cover;
+}
+
+.profile__avatar:hover {
+    opacity: .3;
+    cursor: url('../../../images/pencil.svg'), auto;
 }
 
 @media (max-width: 909px) {

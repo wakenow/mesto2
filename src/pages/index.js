@@ -1,68 +1,166 @@
-import './index.css';
+import '../pages/index.css';
 import FormValidator from '../components/FormValidator.js';
 import Card from '../components/Card.js';
 import Section from '../components/Section.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
+import Api from '../components/Api.js';
+
 
 const validationConfig = {
-    formSelector: '.popup__forms_type_input',
-    inputSelector: '.popup__form',
-    submitButtonSelector: '.popup__submit',
-    inactiveButtonClass: 'popup__submit_disabled',
-    inputErrorClass: 'popup__error',
+    formSelector: '.popup__container_type_input',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__save-button',
+    inactiveButtonClass: 'popup__save-button_disabled',
+    inputErrorClass: 'popup__input_type_error',
     errorClass: 'popup__error_visible'
 };
 
-const editProfileBtn = document.querySelector('.profile__profile-button');
+const editButton = document.querySelector('.profile__profile-button');
 const addButton = document.querySelector('.profile__add-button');
-const popUpEdit = document.querySelector('.popup_type_edit');
-const popUpEditForm = popUpEdit.querySelector('.popup__forms');
+const popupEdit = document.querySelector('.popup_type_edit');
+const popupEditContainer = popupEdit.querySelector('.popup__forms');
+const userAvatar = document.querySelector('.profile__avatar');
 
 const nameInput = document.querySelector('.popup__form_type_name');
-const jobInput = document.querySelector('.popup__form_type_bio');
+const bioInput = document.querySelector('.popup__form_type_bio');
 const placeInput = document.querySelector('.popup__form_type_place');
 const linkInput = document.querySelector('.popup__form_type_link');
+let userData = {};
+const message = document.querySelector('.popup__message');
 
-
-const initialCards = [{
-  name: 'Архыз',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-},
-{
-  name: 'Челябинская область',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-},
-{
-  name: 'Иваново',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-},
-{
-  name: 'Камчатка',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-},
-{
-  name: 'Холмогорский район',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-},
-{
-  name: 'Байкал',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+const apiConfig = {
+    userURL: 'https://mesto.nomoreparties.co/v1/cohort-17/users/me',
+    cardsURL: 'https://mesto.nomoreparties.co/v1/cohort-17/cards',
+    token: 'e6bf7ea4-0157-47ee-b8f8-bf17d3b13ba1'
 }
-];
-
 
 const user = new UserInfo({ nameSelector: '.profile__name', bioSelector: '.profile__subtitle' });
 const imagePopup = new PopupWithImage('.popup_type_image');
 const editModal = new PopupWithForm('.popup_type_edit', formEditSubmitHandler);
 const newCardModal = new PopupWithForm('.popup_type_new-element', formNewCardSubmitHandler);
+const confirmModal = new PopupWithForm('.popup_type_confirm', formConfirmSubmitHandler);
+const avatarModal = new PopupWithForm('.popup_type_avatar', formAvatarSubmitHandler);
+const api = new Api(apiConfig);
+
+let cardsGrid = {};
+const userFromServer = api.userDownload();
+const cardsFromServer = api.cardsDownload();
+
+const dataDownload = [userFromServer, cardsFromServer];
+Promise.all(dataDownload)
+    .then((data) => {
+        userData = data[0];
+        const cardsData = data[1];
+        user.setUserInfo({ "name": userData.name, "bio": userData.about });
+        userAvatar.src = userData.avatar;
+        cardsGrid = new Section({
+            items: cardsData,
+            renderer: (item) => {
+                const card = new Card(item, '#place', userData._id, handlePreviewPicture, deleteCardHandler, likeHandler);
+                const cardElement = card.renderCard();
+                cardsGrid.insertItem(cardElement);
+            }
+        }, '.elements');
+        cardsGrid.renderItems();
+        
+        imagePopup.setEventListeners();
+        editModal.setEventListeners();
+        newCardModal.setEventListeners();
+        confirmModal.setEventListeners();
+        avatarModal.setEventListeners();
+
+        
+        const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
+        formList.forEach((item) => {
+            const validator = new FormValidator(validationConfig, item);
+            validator.enableValidation();
+            item.validator = validator;
+        });
+        
+        editButton.addEventListener('click', openEditModal);
+        addButton.addEventListener('click', () => {
+            console.log(newCardModal);
+            newCardModal._submitButton.disabled = true;
+            newCardModal._submitButton.classList.add('popup__submit_disabled');
+            newCardModal.open()
+        });
+        userAvatar.addEventListener('click', () => {
+            avatarModal._submitButton.disabled = true;
+            avatarModal._submitButton.classList.add('popup__submit_disabled');
+            avatarModal.open()
+        });
+    })
+    .catch((err) => {
+        showErrorMessage(err);
+        console.log(err);
+    });
 
 
-imagePopup.setEventListeners();
-editModal.setEventListeners();
-newCardModal.setEventListeners();
+function formAvatarSubmitHandler(data) {
+    avatarModal._submitButton.textContent = 'Сохранение...';
+    console.log(data);
+    api.avatarUpload(data)
+        .then((res) => {
+            console.log(res);
+            userAvatar.src = res.avatar;
+            this.close();
+        })
+        .catch(err => {
+            showErrorMessage(err);
+            console.log(err);
+        })
+        .finally(() => {
+            avatarModal._submitButton.textContent = 'Сохранить';
+        })
 
+}
+
+function deleteCardHandler(id, evt) {
+    confirmModal.cardToDeleteID = id;
+    confirmModal.cardToDeleteElement = evt.target.parentElement;
+    confirmModal.open();
+}
+
+function formConfirmSubmitHandler() {
+    api.deleteCard(confirmModal.cardToDeleteID)
+        .then(res => {
+            console.log(res);
+            confirmModal.cardToDeleteElement.remove();
+            this.close();
+        })
+        .catch(err => {
+            showErrorMessage(err);
+            console.log(err);
+        });
+
+}
+
+
+function likeHandler(id, evt) {
+    if (evt.target.classList.contains('element__like-button_pressed')) {
+        api.dislikeCard(id)
+            .then((res) => {
+                evt.target.nextElementSibling.textContent = res.likes.length;
+                evt.target.classList.remove('element__like-button_pressed');
+            })
+            .catch((err) => {
+                showErrorMessage(err);
+                console.log(err);
+            })
+    } else {
+        api.likeCard(id)
+            .then((res) => {
+                evt.target.nextElementSibling.textContent = res.likes.length;
+                evt.target.classList.add('element__like-button_pressed');
+            })
+            .catch((err) => {
+                showErrorMessage(err);
+                console.log(err);
+            })
+    }
+}
 
 
 function handlePreviewPicture(name, link) {
@@ -70,55 +168,73 @@ function handlePreviewPicture(name, link) {
 }
 
 function openEditModal() {
-  editModal.open();
-  const userData = user.getUserInfo();
-  nameInput.value = userData.name;
-  jobInput.value = userData.bio;
-  setTimeout(function() {
-      popUpEditForm.querySelector('.popup__form').focus();
-  }, 100);
+    editModal.open();
+    const userData = user.getUserInfo();
+    nameInput.value = userData.name;
+    bioInput.value = userData.bio;
+    setTimeout(function() {
+        popupEditContainer.querySelector('.popup__form').focus();
+    }, 100);
 }
 
-
 function formEditSubmitHandler(data) {
-    user.setUserInfo(data);
-    this.close();
+    editModal._submitButton.textContent = 'Сохранение...'
+    api.profileDataUpload(data.name, data.bio)
+        .then((res) => {
+            console.log(res);
+            user.setUserInfo({ name: res.name, bio: res.about });
+            this.close();
+        })
+        .catch((err) => {
+            showErrorMessage(err);
+            console.log(err);
+        })
+        .finally(() => {
+            editModal._submitButton.textContent = 'Сохранить'
+        })
 }
 
 function formNewCardSubmitHandler(data) {
-    const card = new Card({ name: data.place, link: data.link }, '#place', handlePreviewPicture);
-    const cardElement = card.renderCard();
-    cardsGrid.insertItem(cardElement);
+    newCardModal._submitButton.textContent = 'Сохранение...'
+    api.newCardUpload(data.place, data.link)
+        .then((res) => {
+            console.log(res);
+            const card = new Card({
+                    name: res.name,
+                    link: res.link,
+                    owner: res.owner,
+                    likes: res.likes,
+                    _id: res._id
+                },
+                '#place',
+                userData._id,
+                handlePreviewPicture,
+                deleteCardHandler,
+                likeHandler);
+            const cardElement = card.renderCard();
+            cardsGrid.insertItemToTheTop(cardElement);
+            this.close();
+        })
+        .catch((err) => {
+            showErrorMessage(err);
+            console.log(err);
+        })
+        .finally(() => {
+            newCardModal._submitButton.textContent = 'Сохранить';
+        })
     placeInput.value = '';
     linkInput.value = '';
-    this.close();
 }
 
+function showErrorMessage(text) {
+    message.textContent = text;
+    message.parentElement.classList.add('popup_opened');
+    setTimeout(() => {
+        message.textContent = '';
+    }, 2000);
+    setTimeout(() => {
+        message.parentElement.classList.remove('popup_opened');
+    }, 2200);
 
-const cardsGrid = new Section({
-    items: initialCards,
-    renderer: (item) => {
-        const card = new Card(item, '#place', handlePreviewPicture);
-        const cardElement = card.renderCard();
-        cardsGrid.insertItem(cardElement);
-    }
-}, '.elements');
-cardsGrid.renderItems();
-
-
-const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
-formList.forEach((item) => {
-    const validator = new FormValidator(validationConfig, item);
-    validator.enableValidation();
-    item.validator = validator;
-});
-
-
-editProfileBtn.addEventListener('click', openEditModal);
-addButton.addEventListener('click', () => { newCardModal.open() });
-addButton.addEventListener('click', () => {
-    newCardModal._submitButton.disabled = true;
-    newCardModal._submitButton.classList.add('popup__submit_disabled');
-    newCardModal.open()
-});
+}
 
