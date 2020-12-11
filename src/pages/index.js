@@ -34,7 +34,7 @@ const apiConfig = {
     token: '9c5efa47-3aee-400f-b0b8-aef1a353a938'
 }
 
-const user = new UserInfo({ nameSelector: '.profile__name', bioSelector: '.profile__subtitle'});
+const user = new UserInfo({ nameSelector: '.profile__name', bioSelector: '.profile__subtitle', avatarSelector: '.profile__avatar'});
 const imagePopup = new PopupWithImage('.popup_type_image');
 const editModal = new PopupWithForm('.popup_type_edit', formEditSubmitHandler);
 const newCardModal = new PopupWithForm('.popup_type_new-element', formNewCardSubmitHandler);
@@ -52,7 +52,7 @@ Promise.all(dataDownload)
         userData = data[0];
         const cardsData = data[1];
         user.setUserInfo({ "name": userData.name, "bio": userData.about });
-        userAvatar.src = userData.avatar; 
+        userAvatar.src = userData.avatar;
         cardsGrid = new Section({
             items: cardsData,
             renderer: (item) => {
@@ -79,14 +79,15 @@ Promise.all(dataDownload)
         
         editButton.addEventListener('click', openEditModal);
         addButton.addEventListener('click', () => {
-            newCardModal._submitButton.disabled = true; 
-            newCardModal._submitButton.classList.add('popup__submit_disabled'); 
-            newCardModal.open() 
-        }); 
-        userAvatar.addEventListener('click', () => { 
-            avatarModal._submitButton.disabled = true; 
-            avatarModal._submitButton.classList.add('popup__submit_disabled'); 
-            avatarModal.open() 
+            console.log(newCardModal);
+            newCardModal.submitButton.disabled = true;
+            newCardModal.submitButton.classList.add('popup__submit_disabled');
+            newCardModal.open()
+        });
+        userAvatar.addEventListener('click', () => {
+            avatarModal.submitButton.disabled = true;
+            avatarModal.submitButton.classList.add('popup__submit_disabled');
+            avatarModal.open()
         });
     })
     .catch((err) => {
@@ -96,20 +97,20 @@ Promise.all(dataDownload)
 
 
 function formAvatarSubmitHandler(data) {
-    avatarModal._submitButton.textContent = 'Сохранение...';
+    avatarModal.submitButton.textContent = 'Сохранение...';
     console.log(data);
     api.avatarUpload(data)
         .then((res) => {
             console.log(res);
-            userAvatar.src = res.avatar;
-            avatarModal.close();
+            user.setAvatar(res.avatar);
+            this.close();
         })
         .catch(err => {
             showErrorMessage(err);
             console.log(err);
         })
         .finally(() => {
-            avatarModal._submitButton.textContent = 'Сохранить';
+            avatarModal.submitButton.textContent = 'Сохранить';
         })
 
 }
@@ -175,24 +176,24 @@ function openEditModal() {
 }
 
 function formEditSubmitHandler(data) {
-    editModal._submitButton.textContent = 'Сохранение...'
+    editModal.submitButton.textContent = 'Сохранение...'
     api.profileDataUpload(data.name, data.bio)
         .then((res) => {
             console.log(res);
             user.setUserInfo({ name: res.name, bio: res.about });
-            editModal.close();
+            this.close();
         })
         .catch((err) => {
             showErrorMessage(err);
             console.log(err);
         })
         .finally(() => {
-            editModal._submitButton.textContent = 'Сохранить'
+            editModal.submitButton.textContent = 'Сохранить'
         })
 }
 
 function formNewCardSubmitHandler(data) {
-    newCardModal._submitButton.textContent = 'Сохранение...'
+    newCardModal.submitButton.textContent = 'Сохранение...'
     api.newCardUpload(data.place, data.link)
         .then((res) => {
             console.log(res);
@@ -210,14 +211,14 @@ function formNewCardSubmitHandler(data) {
                 likeHandler);
             const cardElement = card.renderCard();
             cardsGrid.insertItemToTheTop(cardElement);
-            newCardModal.close();
+            this.close();
         })
         .catch((err) => {
             showErrorMessage(err);
             console.log(err);
         })
         .finally(() => {
-            newCardModal._submitButton.textContent = 'Сохранить';
+            newCardModal.submitButton.textContent = 'Сохранить';
         })
 }
 

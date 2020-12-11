@@ -1,7 +1,8 @@
 export default class UserInfo {
-    constructor({ nameSelector, bioSelector}) {
+    constructor({ nameSelector, bioSelector, avatarSelector }) {
         this._name = document.querySelector(nameSelector);
         this._bio = document.querySelector(bioSelector);
+        this._avatar = document.querySelector(avatarSelector);
 
 
     }
@@ -14,5 +15,8 @@ export default class UserInfo {
     setUserInfo({ name, bio }) {
         this._name.textContent = name;
         this._bio.textContent = bio;
+    }
+    setAvatar(avatar) {
+        this._avatar.src = avatar;
     }
 }
