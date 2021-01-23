@@ -4,7 +4,7 @@ export default class Api {
         this._cardsURL = cardsURL;
         this._token = token;
     }
-    userDownload() {
+    getUserData() {
         return fetch(this._userURL, {
                 method: 'GET',
                 headers: {
@@ -25,7 +25,7 @@ export default class Api {
         // })
     }
 
-    cardsDownload() {
+    getInitialCards() {
         return fetch(this._cardsURL, {
                 method: 'GET',
                 headers: {
@@ -42,7 +42,7 @@ export default class Api {
             })
     }
 
-    profileDataUpload(name, about) {
+    uploadUserProfileData(name, about) {
         return fetch(this._userURL, {
                 method: 'PATCH',
                 headers: {
@@ -62,7 +62,7 @@ export default class Api {
                 }
             })
     }
-    newCardUpload(name, link) {
+    addCard(name, link) {
         return fetch(this._cardsURL, {
                 method: 'POST',
                 headers: {

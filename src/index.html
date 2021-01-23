@@ -38,9 +38,9 @@
         <div class="popup popup_type_edit">
             <form class="popup__forms popup__forms_type_input" name="edit-forms" action="#" method="GET" novalidate>
                 <p class="popup__title">Редактировать профиль</p>
-                <input class="popup__form popup__form_type_name" type="text" name="name" required minlength="2" maxlength="40">
+                <input class="popup__form popup__form_type_name" type="text" name="name" placeholder="Имя" required minlength="2" maxlength="40">
                 <span class="popup__error popup__error_type_name"></span>
-                <input class="popup__form popup__form_type_bio" type="text" name="bio" required minlength="2" maxlength="200">
+                <input class="popup__form popup__form_type_bio" type="text" name="bio" placeholder="Вид Деятельности" required minlength="2" maxlength="200">
                 <span class="popup__error popup__error_type_bio"></span>
                 <button type="submit" class="popup__submit">Сохранить</button>
                 <button type="reset" class="popup__close-button popup__close-button_type_input"></button>
@@ -70,7 +70,7 @@
         <div class="popup popup_type_avatar">
             <form name="avatar" action="#" class="popup__forms popup__forms_type_input" novalidate>
                 <p class="popup__title">Обновить аватар</p>
-                <input name="link" class="popup__form popup__form_type_link" type="url" required placeholder="ссылка на картинку" required autocomplete="off">
+                <input name="link" class="popup__form popup__form_type_link" type="url" required placeholder="Ссылка на картинку" required autocomplete="off">
                 <span class="popup__error popup__error_type_link"></span>
                 <button type="submit" class="popup__submit">Сохранить</button>
                 <button type="reset" class="popup__close-button popup__close-button_type_input"></button>

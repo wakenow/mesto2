@@ -34,31 +34,62 @@ const apiConfig = {
     token: '9c5efa47-3aee-400f-b0b8-aef1a353a938'
 }
 
-const user = new UserInfo({ nameSelector: '.profile__name', bioSelector: '.profile__subtitle', avatarSelector: '.profile__avatar'});
+const userConfig = new UserInfo ({
+    nameSelector: '.profile__name',
+    bioSelector: '.profile__subtitle',
+    avatarSelector: '.profile__avatar'
+});
+
 const imagePopup = new PopupWithImage('.popup_type_image');
 const editModal = new PopupWithForm('.popup_type_edit', formEditSubmitHandler);
 const newCardModal = new PopupWithForm('.popup_type_new-element', formNewCardSubmitHandler);
 const confirmModal = new PopupWithForm('.popup_type_confirm', formConfirmSubmitHandler);
 const avatarModal = new PopupWithForm('.popup_type_avatar', formAvatarSubmitHandler);
 const api = new Api(apiConfig);
+const popupFormSelector = popupEditContainer.querySelector('.popup__form');
+
+function createCard(item) {
+    const card = new Card(item, '#place', userData._id, handlePreviewPicture, deleteCardHandler, likeHandler);
+    const cardElement = card.renderCard(); 
+    cardsGrid.addItem(cardElement); 
+}; 
+
+function handlePreviewPicture(name, link) {
+    imagePopup.open(name, link);
+}
+
+function openEditProfileModal() {
+    editModal.open();
+    const userData = userConfig.getUserInfo();
+    nameInput.value = userData.name;
+    bioInput.value = userData.bio;
+    setTimeout(function() {
+        popupFormSelector.focus();
+    }, 100);
+}
+
+const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
+formList.forEach((item) => {
+    const validator = new FormValidator(validationConfig, item);
+    validator.enableValidation();
+    item.validator = validator;
+});
 
 let cardsGrid = {};
-const userFromServer = api.userDownload();
-const cardsFromServer = api.cardsDownload();
+const userFromServer = api.getUserData();
+const cardsFromServer = api.getInitialCards();
 
 const dataDownload = [userFromServer, cardsFromServer];
 Promise.all(dataDownload)
     .then((data) => {
         userData = data[0];
         const cardsData = data[1];
-        user.setUserInfo({ "name": userData.name, "bio": userData.about });
+        userConfig.setUserInfo({ "name": userData.name, "bio": userData.about });
         userAvatar.src = userData.avatar;
         cardsGrid = new Section({
             items: cardsData,
             renderer: (item) => {
-                const card = new Card(item, '#place', userData._id, handlePreviewPicture, deleteCardHandler, likeHandler);
-                const cardElement = card.renderCard();
-                cardsGrid.insertItem(cardElement);
+               createCard(item);
             }
         }, '.elements');
         cardsGrid.renderItems();
@@ -68,16 +99,8 @@ Promise.all(dataDownload)
         newCardModal.setEventListeners();
         confirmModal.setEventListeners();
         avatarModal.setEventListeners();
-
         
-        const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
-        formList.forEach((item) => {
-            const validator = new FormValidator(validationConfig, item);
-            validator.enableValidation();
-            item.validator = validator;
-        });
-        
-        editButton.addEventListener('click', openEditModal);
+        editButton.addEventListener('click', openEditProfileModal);
         addButton.addEventListener('click', () => {
             console.log(newCardModal);
             newCardModal.submitButton.disabled = true;
@@ -101,9 +124,7 @@ function formAvatarSubmitHandler(data) {
     console.log(data);
     api.avatarUpload(data)
         .then((res) => {
-            console.log(res);
-            user.setAvatar(res.avatar);
-            this.close();
+            userConfig.setAvatar(res.avatar);
         })
         .catch(err => {
             showErrorMessage(err);
@@ -111,6 +132,7 @@ function formAvatarSubmitHandler(data) {
         })
         .finally(() => {
             avatarModal.submitButton.textContent = 'Сохранить';
+            this.close();
         })
 
 }
@@ -126,12 +148,14 @@ function formConfirmSubmitHandler() {
         .then(res => {
             console.log(res);
             confirmModal.cardToDeleteElement.remove();
-            this.close();
         })
         .catch(err => {
             showErrorMessage(err);
             console.log(err);
-        });
+        })
+        .finally(() => {
+            this.close();
+        })
 
 }
 
@@ -160,57 +184,29 @@ function likeHandler(id, evt) {
     }
 }
 
-
-function handlePreviewPicture(name, link) {
-    imagePopup.open(name, link);
-}
-
-function openEditModal() {
-    editModal.open();
-    const userData = user.getUserInfo();
-    nameInput.value = userData.name;
-    bioInput.value = userData.bio;
-    setTimeout(function() {
-        popupEditContainer.querySelector('.popup__form').focus();
-    }, 100);
-}
-
 function formEditSubmitHandler(data) {
     editModal.submitButton.textContent = 'Сохранение...'
-    api.profileDataUpload(data.name, data.bio)
+    api.uploadUserProfileData(data.name, data.bio)
         .then((res) => {
             console.log(res);
-            user.setUserInfo({ name: res.name, bio: res.about });
-            this.close();
+            userConfig.setUserInfo({ name: res.name, bio: res.about });
         })
         .catch((err) => {
             showErrorMessage(err);
             console.log(err);
         })
         .finally(() => {
-            editModal.submitButton.textContent = 'Сохранить'
+            editModal.submitButton.textContent = 'Сохранить';
+            this.close();
         })
 }
 
 function formNewCardSubmitHandler(data) {
     newCardModal.submitButton.textContent = 'Сохранение...'
-    api.newCardUpload(data.place, data.link)
+    api.addCard(data.place, data.link)
         .then((res) => {
             console.log(res);
-            const card = new Card({
-                    name: res.name,
-                    link: res.link,
-                    owner: res.owner,
-                    likes: res.likes,
-                    _id: res._id
-                },
-                '#place',
-                userData._id,
-                handlePreviewPicture,
-                deleteCardHandler,
-                likeHandler);
-            const cardElement = card.renderCard();
-            cardsGrid.insertItemToTheTop(cardElement);
+            createCard(res);
             this.close();
         })
         .catch((err) => {

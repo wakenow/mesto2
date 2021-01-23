@@ -13,10 +13,16 @@ export default class UserInfo {
         return userData;
     }
     setUserInfo({ name, bio }) {
+        if (name) {
         this._name.textContent = name;
+        }
+        if (bio) {
         this._bio.textContent = bio;
+        }
     }
     setAvatar(avatar) {
+        if (avatar) {
         this._avatar.src = avatar;
+        }
     }
 }

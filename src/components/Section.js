@@ -10,12 +10,8 @@ export default class Section {
                 this._renderer(item);
             });
         }
-      
-    insertItem(element) {
-        this._container.append(element);
+    
+    addItem(element) {
+            this._container.append(element);
     }
-    insertItemToTheTop(element) {
-        this._container.prepend(element);
-    }
-
 }
