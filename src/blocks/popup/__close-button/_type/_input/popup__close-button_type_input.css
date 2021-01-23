@@ -1,14 +1,14 @@
 .popup__close-button_type_input {
-    outline: none; 
+    outline: none;
     background-color: transparent;
     position: absolute;
     width: 41px;
     height: 41px;
     left: 99%;
     top: -11%;
-    margin: 0; 
-    padding: 0; 
-    border: 0; 
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
 
 @media (max-width: 909px) {
