@@ -26,7 +26,7 @@ export default class Card {
             });
             cardImage.addEventListener('click', () => this._popupHandler(this._name, this._link));
         }
-        //
+        
     renderCard() {
         this._element = this._getTemplate();
         if (this._myID === this._owner) {

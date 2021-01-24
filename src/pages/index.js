@@ -6,6 +6,7 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 import Api from '../components/Api.js';
+import {newCardSubmitButton, avatarSubmitButton, editSubmitButton, renderLoading} from '../utils/utils.js';
 
 
 const validationConfig = {
@@ -60,6 +61,7 @@ function handlePreviewPicture(name, link) {
 
 function openEditProfileModal() {
     editModal.open();
+    formNewCardSubmitValidator.clearErrors();
     const userData = userConfig.getUserInfo();
     nameInput.value = userData.name;
     bioInput.value = userData.bio;
@@ -68,12 +70,12 @@ function openEditProfileModal() {
     }, 100);
 }
 
-const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
-formList.forEach((item) => {
-    const validator = new FormValidator(validationConfig, item);
-    validator.enableValidation();
-    item.validator = validator;
-});
+const formAvatarSubmitValidator = new FormValidator(validationConfig, avatarModal._form);
+formAvatarSubmitValidator.enableValidation();
+const formEditSubmitValidator = new FormValidator(validationConfig, newCardModal._form);
+formEditSubmitValidator.enableValidation();
+const formNewCardSubmitValidator = new FormValidator(validationConfig, popupEditContainer);
+formNewCardSubmitValidator.enableValidation();
 
 let cardsGrid = {};
 const userFromServer = api.getUserData();
@@ -106,11 +108,13 @@ Promise.all(dataDownload)
             newCardModal.submitButton.disabled = true;
             newCardModal.submitButton.classList.add('popup__submit_disabled');
             newCardModal.open()
+            formEditSubmitValidator.clearErrors();
         });
         userAvatar.addEventListener('click', () => {
             avatarModal.submitButton.disabled = true;
             avatarModal.submitButton.classList.add('popup__submit_disabled');
             avatarModal.open()
+            formAvatarSubmitValidator.clearErrors();
         });
     })
     .catch((err) => {
@@ -118,9 +122,8 @@ Promise.all(dataDownload)
         console.log(err);
     });
 
-
 function formAvatarSubmitHandler(data) {
-    avatarModal.submitButton.textContent = 'Сохранение...';
+    renderLoading(true, avatarSubmitButton);
     console.log(data);
     api.avatarUpload(data)
         .then((res) => {
@@ -131,7 +134,7 @@ function formAvatarSubmitHandler(data) {
             console.log(err);
         })
         .finally(() => {
-            avatarModal.submitButton.textContent = 'Сохранить';
+            renderLoading(false, avatarSubmitButton);
             this.close();
         })
 
@@ -185,7 +188,7 @@ function likeHandler(id, evt) {
 }
 
 function formEditSubmitHandler(data) {
-    editModal.submitButton.textContent = 'Сохранение...'
+    renderLoading(true, editSubmitButton)
     api.uploadUserProfileData(data.name, data.bio)
         .then((res) => {
             console.log(res);
@@ -196,25 +199,25 @@ function formEditSubmitHandler(data) {
             console.log(err);
         })
         .finally(() => {
-            editModal.submitButton.textContent = 'Сохранить';
+            renderLoading(false, editSubmitButton)
             this.close();
         })
 }
 
 function formNewCardSubmitHandler(data) {
-    newCardModal.submitButton.textContent = 'Сохранение...'
+    renderLoading(true, newCardSubmitButton)
     api.addCard(data.place, data.link)
         .then((res) => {
             console.log(res);
             createCard(res);
-            this.close();
         })
         .catch((err) => {
             showErrorMessage(err);
             console.log(err);
         })
         .finally(() => {
-            newCardModal.submitButton.textContent = 'Сохранить';
+            renderLoading(false, newCardSubmitButton)
+            this.close();
         })
 }
 

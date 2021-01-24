@@ -29,8 +29,6 @@ export default class PopupWithForm extends Popup {
     }
     close() {
         super.close();
-        this._form.validator.clearErrors();
-        this._form.reset();
 
 
     }
