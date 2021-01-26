@@ -6,7 +6,7 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 import Api from '../components/Api.js';
-import {newCardSubmitButton, avatarSubmitButton, editSubmitButton, renderLoading} from '../utils/utils.js';
+import {newCardSubmitButton, avatarSubmitButton, editSubmitButton, renderLoading, showErrorMessage} from '../utils/utils.js';
 
 
 const validationConfig = {
@@ -27,7 +27,6 @@ const userAvatar = document.querySelector('.profile__avatar');
 const nameInput = document.querySelector('.popup__form_type_name');
 const bioInput = document.querySelector('.popup__form_type_bio');
 let userData = {};
-const message = document.querySelector('.popup__message');
 
 const apiConfig = {
     userURL: 'https://mesto.nomoreparties.co/v1/cohort-17/users/me',
@@ -48,11 +47,11 @@ const confirmModal = new PopupWithForm('.popup_type_confirm', formConfirmSubmitH
 const avatarModal = new PopupWithForm('.popup_type_avatar', formAvatarSubmitHandler);
 const api = new Api(apiConfig);
 const popupFormSelector = popupEditContainer.querySelector('.popup__form');
+const place = '#place';
 
 function createCard(item) {
-    const card = new Card(item, '#place', userData._id, handlePreviewPicture, deleteCardHandler, likeHandler);
-    const cardElement = card.renderCard(); 
-    cardsGrid.addItem(cardElement); 
+    const card = new Card(item, place, userData._id, handlePreviewPicture, deleteCardHandler, likeHandler);
+    return card;
 }; 
 
 function handlePreviewPicture(name, link) {
@@ -91,7 +90,8 @@ Promise.all(dataDownload)
         cardsGrid = new Section({
             items: cardsData,
             renderer: (item) => {
-               createCard(item);
+                const cardElement = createCard(item).renderCard(item); 
+                cardsGrid.addItem(cardElement); 
             }
         }, '.elements');
         cardsGrid.renderItems();
@@ -106,13 +106,13 @@ Promise.all(dataDownload)
         addButton.addEventListener('click', () => {
             console.log(newCardModal);
             newCardModal.submitButton.disabled = true;
-            newCardModal.submitButton.classList.add('popup__submit_disabled');
+            newCardModal.submitButton.classList.add(validationConfig.inactiveButtonClass);
             newCardModal.open()
             formEditSubmitValidator.clearErrors();
         });
         userAvatar.addEventListener('click', () => {
             avatarModal.submitButton.disabled = true;
-            avatarModal.submitButton.classList.add('popup__submit_disabled');
+            avatarModal.submitButton.classList.add(validationConfig.inactiveButtonClass);
             avatarModal.open()
             formAvatarSubmitValidator.clearErrors();
         });
@@ -209,7 +209,8 @@ function formNewCardSubmitHandler(data) {
     api.addCard(data.place, data.link)
         .then((res) => {
             console.log(res);
-            createCard(res);
+            const cardElement = createCard(res).renderCard(res); 
+            cardsGrid.addItem(cardElement); 
         })
         .catch((err) => {
             showErrorMessage(err);
@@ -221,15 +222,5 @@ function formNewCardSubmitHandler(data) {
         })
 }
 
-function showErrorMessage(text) {
-    message.textContent = text;
-    message.parentElement.classList.add('popup_opened');
-    setTimeout(() => {
-        message.textContent = '';
-    }, 2000);
-    setTimeout(() => {
-        message.parentElement.classList.remove('popup_opened');
-    }, 2200);
 
-}
 

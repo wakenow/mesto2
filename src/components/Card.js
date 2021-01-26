@@ -21,7 +21,8 @@ export default class Card {
     }
 
     _setEventListeners(cardImage) {
-            this._element.querySelector('.element__like-button').addEventListener('click', (evt) => {
+            this._likeButton = this._element.querySelector('.element__like-button');
+            this._likeButton.addEventListener('click', (evt) => {
                 this._likeHandler(this._cardID, evt);
             });
             cardImage.addEventListener('click', () => this._popupHandler(this._name, this._link));
@@ -44,7 +45,7 @@ export default class Card {
         this._element.querySelector('.element__like-counter').textContent = this._likes.length;
 
         if ((this._likes.some(elem => elem._id === this._myID))) {
-            this._element.querySelector('.element__like-button').classList.add('element__like-button_pressed');
+            this._likeButton.classList.add('element__like-button_pressed');
         }
 
         return this._element;
