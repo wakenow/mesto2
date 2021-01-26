@@ -21,6 +21,7 @@ export default class Card {
     }
 
     _setEventListeners(cardImage) {
+            this._removeButton = this._element.querySelector('.element__remove-button');
             this._likeButton = this._element.querySelector('.element__like-button');
             this._likeButton.addEventListener('click', (evt) => {
                 this._likeHandler(this._cardID, evt);
@@ -30,19 +31,20 @@ export default class Card {
         
     renderCard() {
         this._element = this._getTemplate();
-        if (this._myID === this._owner) {
-            this._element.querySelector('.element__remove-button').addEventListener('click', (evt) => {
-                this._deleteHandler(this._cardID, evt);
-            });
-        } else {
-            this._element.querySelector('.element__remove-button').remove();
-        }
         const newCardImage = this._element.querySelector('.element__image');
         newCardImage.src = this._link;
         newCardImage.alt = this._name;
         this._setEventListeners(newCardImage);
         this._element.querySelector('.element__text').textContent = this._name;
         this._element.querySelector('.element__like-counter').textContent = this._likes.length;
+        if (this._myID === this._owner) {
+            this._removeButton.addEventListener('click', (evt) => {
+                this._deleteHandler(this._cardID, evt);
+            });
+        } else {
+            this._removeButton.remove();
+        }
+        
 
         if ((this._likes.some(elem => elem._id === this._myID))) {
             this._likeButton.classList.add('element__like-button_pressed');
