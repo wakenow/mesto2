@@ -1,9 +1,0 @@
-.element__name {
-    display: flex;
-    flex-direction: row;
-    max-height: 79px;
-    min-height: 79px;
-    background-color: white;
-    justify-content: space-between;
-    align-self: center;
-}
